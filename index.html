@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaTyper - Java Syntax Speed Typer</title>
+    <!-- We will use standard web fonts for UI and a monospaced font for code -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <div class="logo">
+                <span class="java-orange">Java</span>Typer
+            </div>
+            <div class="header-nav">
+                <button id="nav-btn-home" class="nav-btn active">Practice</button>
+            </div>
+        </header>
+
+        <!-- Configuration Menu View -->
+        <main id="view-config" class="view active">
+            <div class="card glass-panel">
+                <h1>Configure Practice Test</h1>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <p class="subtitle" style="margin-bottom: 0;">Select parameters to hone your muscle memory.</p>
+                    <button id="btn-start" class="btn-primary">Start Typing</button>
+                </div>
+
+                <div class="config-grid">
+                    <!-- Time Selection -->
+                    <div class="config-group">
+                        <h3>Test Duration</h3>
+                        <div class="radio-group" id="time-options">
+                            <label class="radio-item">
+                                <input type="radio" name="time" value="60" checked>
+                                <span class="radio-btn">1 Minute</span>
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="time" value="300">
+                                <span class="radio-btn">5 Minutes</span>
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="time" value="600">
+                                <span class="radio-btn">10 Minutes</span>
+                            </label>
+                            <label class="radio-item custom-time-item">
+                                <input type="radio" name="time" value="custom">
+                                <span class="radio-btn">Custom:</span>
+                                <input type="number" id="custom-time-input" min="1" max="120" value="15" disabled
+                                    class="small-input"> min
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Mode Selection -->
+                    <div class="config-group">
+                        <h3>Practice Mode</h3>
+                        <div class="radio-group" id="mode-options">
+                            <label class="radio-item">
+                                <input type="radio" name="mode" value="standard" checked>
+                                <span class="radio-btn">Standard Mode</span>
+                                <small>Keywords, Classes, Generics</small>
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="mode" value="method">
+                                <span class="radio-btn">Method Practice</span>
+                                <small>Class methods & signatures</small>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Word Type Toggles (Only visible in Standard Mode) -->
+                    <div class="config-group" id="word-types-section">
+                        <h3>Include Elements</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="toggle-keywords" checked>
+                                <span class="checkmark"></span>
+                                Keywords (e.g., class, public)
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="toggle-classes" checked>
+                                <span class="checkmark"></span>
+                                Classes & Interfaces
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="toggle-advanced-keywords">
+                                <span class="checkmark"></span>
+                                Advanced (volatile, transient, etc)
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Package Selection -->
+                    <div class="config-group">
+                        <h3>Core Packages</h3>
+                        <div class="checkbox-group" id="package-toggles">
+                            <!-- Dynamically populated from dictionary.json -->
+                        </div>
+                    </div>
+
+                    <!-- Advanced Package Selection -->
+                    <div class="config-group">
+                        <h3>Advanced Packages</h3>
+                        <div class="checkbox-group" id="advanced-package-toggles">
+                            <!-- Dynamically populated from packages.json -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Typing Practice View -->
+        <main id="view-typing" class="view hidden">
+            <div class="test-header">
+                <div class="stats-live">
+                    <div class="stat-box">
+                        <span class="stat-label">Time</span>
+                        <span id="live-time" class="stat-value">1:00</span>
+                    </div>
+                </div>
+                <button id="btn-abort" class="btn-secondary btn-sm">Abort Test</button>
+            </div>
+
+            <div class="typing-container">
+                <div id="words-wrapper">
+                    <!-- Words will be dynamically injected here -->
+                </div>
+                <!-- Hidden input to capture mobile/desktop keystrokes properly if needed, 
+                     but we'll primarily use keydown events on body or specific container -->
+                <input type="text" id="hidden-input" autocomplete="off" autocorrect="off" autocapitalize="off"
+                    spellcheck="false">
+            </div>
+
+            <div class="test-footer">
+                <p class="hint">Press <kbd>Tab</kbd> to restart quickly.</p>
+            </div>
+        </main>
+
+        <!-- Results View -->
+        <main id="view-results" class="view hidden">
+            <div class="card glass-panel results-card">
+                <h2>Test Completed</h2>
+
+                <div class="results-grid">
+                    <div class="result-box primary">
+                        <span class="result-label">WPM</span>
+                        <span id="res-wpm" class="result-value">0</span>
+                    </div>
+                    <div class="result-box">
+                        <span class="result-label">Accuracy</span>
+                        <span id="res-acc" class="result-value">0%</span>
+                    </div>
+                    <div class="result-box">
+                        <span class="result-label">Keystrokes</span>
+                        <span id="res-keys" class="result-value">0<small>(<span class="correct-text">0</span> | <span
+                                    class="incorrect-text">0</span>)</small></span>
+                    </div>
+                </div>
+
+                <div class="test-context">
+                    <h4>Test Settings</h4>
+                    <p id="res-context">Mode: Standard | Time: 1 min | Packages: java.util</p>
+                </div>
+
+                <div class="action-row">
+                    <button id="btn-restart-results" class="btn-primary">Practice Again</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script loading -->
+    <script src="main.js"></script>
+</body>
+
+</html>

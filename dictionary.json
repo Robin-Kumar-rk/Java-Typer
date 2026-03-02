@@ -1,0 +1,149 @@
+{
+  "keywords": [
+    "public",
+    "private",
+    "protected",
+    "class",
+    "interface",
+    "int",
+    "boolean",
+    "void",
+    "static",
+    "final",
+    "volatile",
+    "transient",
+    "synchronized",
+    "throws",
+    "throw",
+    "return",
+    "new",
+    "import",
+    "package",
+    "extends",
+    "implements",
+    "super",
+    "this",
+    "instanceof",
+    "if",
+    "else",
+    "for",
+    "while",
+    "do",
+    "switch",
+    "case",
+    "default",
+    "break",
+    "continue"
+  ],
+  "packages": {
+    "java.lang": {
+      "String": [
+        ".substring(int beginIndex, int endIndex)",
+        ".substring(int beginIndex)",
+        ".indexOf(String str)",
+        ".charAt(int index)",
+        ".length()",
+        ".isEmpty()",
+        ".equals(Object anObject)",
+        ".toLowerCase()",
+        ".toUpperCase()",
+        ".trim()",
+        ".split(String regex)",
+        ".replace(CharSequence target, CharSequence replacement)"
+      ],
+      "Math": [
+        ".max(int a, int b)",
+        ".abs(int a)",
+        ".min(int a, int b)",
+        ".pow(double a, double b)",
+        ".sqrt(double a)"
+      ],
+      "System": [
+        ".out.println(String x)",
+        ".out.print(String x)",
+        ".currentTimeMillis()",
+        ".exit(int status)"
+      ],
+      "Object": [
+        ".toString()",
+        ".equals(Object obj)",
+        ".hashCode()"
+      ],
+      "Integer": [
+        ".parseInt(String s)",
+        ".valueOf(int i)"
+      ],
+      "Double": [
+        ".parseDouble(String s)"
+      ]
+    },
+    "java.util": {
+      "HashMap<K, V>": [
+        ".put(K key, V value)",
+        ".get(Object key)",
+        ".containsKey(Object key)",
+        ".containsValue(Object value)",
+        ".remove(Object key)",
+        ".keySet()",
+        ".values()",
+        ".entrySet()",
+        ".size()",
+        ".isEmpty()"
+      ],
+      "List<E>": [
+        ".add(E e)",
+        ".add(int index, E element)",
+        ".get(int index)",
+        ".set(int index, E element)",
+        ".size()",
+        ".remove(int index)",
+        ".remove(Object o)",
+        ".isEmpty()",
+        ".contains(Object o)",
+        ".clear()"
+      ],
+      "ArrayList<E>": [
+        ".add(E e)",
+        ".get(int index)",
+        ".size()"
+      ],
+      "Set<E>": [
+        ".add(E e)",
+        ".remove(Object o)",
+        ".contains(Object o)",
+        ".size()"
+      ],
+      "HashSet<E>": [
+        ".add(E e)",
+        ".remove(Object o)",
+        ".contains(Object o)"
+      ],
+      "Queue<E>": [
+        ".add(E e)",
+        ".offer(E e)",
+        ".remove()",
+        ".poll()",
+        ".element()",
+        ".peek()"
+      ],
+      "Map<K, V>": [
+        ".put(K key, V value)",
+        ".get(Object key)",
+        ".keySet()"
+      ],
+      "Arrays": [
+        ".sort(int[] a)",
+        ".binarySearch(int[] a, int key)",
+        ".fill(int[] a, int val)",
+        ".copyOf(int[] original, int newLength)",
+        ".toString(int[] a)"
+      ],
+      "Collections": [
+        ".sort(List<T> list)",
+        ".binarySearch(List<? extends Comparable<? super T>> list, T key)",
+        ".reverse(List<?> list)",
+        ".shuffle(List<?> list)"
+      ]
+    }
+  }
+}

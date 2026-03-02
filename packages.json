@@ -1,0 +1,80 @@
+{
+    "packages": {
+        "java.io": {
+            "File": [
+                ".exists()",
+                ".createNewFile()",
+                ".delete()",
+                ".mkdir()",
+                ".mkdirs()",
+                ".getName()",
+                ".getPath()",
+                ".getAbsolutePath()",
+                ".length()",
+                ".listFiles()"
+            ],
+            "FileInputStream": [
+                ".read()",
+                ".read(byte[] b)",
+                ".read(byte[] b, int off, int len)",
+                ".close()"
+            ],
+            "FileOutputStream": [
+                ".write(int b)",
+                ".write(byte[] b)",
+                ".write(byte[] b, int off, int len)",
+                ".flush()",
+                ".close()"
+            ],
+            "BufferedReader": [
+                ".readLine()",
+                ".read()",
+                ".close()"
+            ],
+            "BufferedWriter": [
+                ".write(String s)",
+                ".newLine()",
+                ".flush()",
+                ".close()"
+            ],
+            "InputStreamReader": [
+                ".read()",
+                ".close()"
+            ],
+            "OutputStreamWriter": [
+                ".write(String str)",
+                ".flush()",
+                ".close()"
+            ],
+            "PrintWriter": [
+                ".print(String s)",
+                ".println(String s)",
+                ".flush()",
+                ".close()"
+            ]
+        },
+        "java.net": {
+            "URL": [
+                ".openConnection()",
+                ".openStream()",
+                ".getHost()"
+            ],
+            "HttpURLConnection": [
+                ".setRequestMethod(String method)",
+                ".getResponseCode()",
+                ".disconnect()"
+            ]
+        },
+        "java.nio.file": {
+            "Files": [
+                ".readAllBytes(Path path)",
+                ".readAllLines(Path path)",
+                ".write(Path path, byte[] bytes)",
+                ".exists(Path path)"
+            ],
+            "Paths": [
+                ".get(String first, String... more)"
+            ]
+        }
+    }
+}
