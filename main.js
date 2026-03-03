@@ -432,8 +432,14 @@ function startTest() {
     switchView('typing');
     hiddenInput.focus();
 
-    // Cursor visual is set via CSS, but we need to mark the first word and letter as active
     updateWordDisplayStatus();
+    wordsWrapper.style.transform = 'translateY(0)';
+
+    // Defer the scroll reset until after the browser redraws the 'typing' view
+    requestAnimationFrame(() => {
+        wordsWrapper.scrollTo(0, 0);
+        wordsWrapper.scrollTop = 0;
+    });
 }
 
 function getSyntaxClass(wordStr, mode) {
