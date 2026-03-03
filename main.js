@@ -387,7 +387,11 @@ function resolveGenerics(classSignature, classesPool) {
                 // Depth 2
                 const innerCls = getRandomItem(classesPool).className;
                 // prevent infinite loops or excessively gross generics if it also has < >
-                return innerCls.replace(/<(.*?)>/, `<${getRandomItem(wrappers)}>`);
+                return innerCls.replace(/<(.*?)>/, (match, innerTypes) => {
+                    const innerTypeVars = innerTypes.split(',');
+                    const innerResolved = innerTypeVars.map(() => getRandomItem(wrappers));
+                    return `<${innerResolved.join(', ')}>`;
+                });
             }
             return getRandomItem(wrappers);
         });
