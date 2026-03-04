@@ -6,7 +6,13 @@
     "class",
     "interface",
     "int",
+    "long",
+    "short",
+    "byte",
     "boolean",
+    "char",
+    "float",
+    "double",
     "void",
     "static",
     "final",
@@ -143,6 +149,58 @@
         ".binarySearch(List<? extends Comparable<? super T>> list, T key)",
         ".reverse(List<?> list)",
         ".shuffle(List<?> list)"
+      ]
+    }
+  },
+  "constructors": {
+    "java.lang": {
+      "String": [
+        "new String()",
+        "new String(char[] arr)",
+        "new String(byte[] bytes)",
+        "new String(String original)"
+      ],
+      "StringBuilder": [
+        "new StringBuilder()",
+        "new StringBuilder(int capacity)",
+        "new StringBuilder(String str)"
+      ],
+      "Integer": [
+        "new Integer(int value)",
+        "new Integer(String s)"
+      ],
+      "Double": [
+        "new Double(double value)",
+        "new Double(String s)"
+      ],
+      "Object": [
+        "new Object()"
+      ]
+    },
+    "java.util": {
+      "ArrayList<E>": [
+        "new ArrayList<>()",
+        "new ArrayList<>(int initialCapacity)",
+        "new ArrayList<>(Collection<? extends E> c)"
+      ],
+      "HashMap<K, V>": [
+        "new HashMap<>()",
+        "new HashMap<>(int initialCapacity)",
+        "new HashMap<>(Map<? extends K, ? extends V> m)"
+      ],
+      "HashSet<E>": [
+        "new HashSet<>()",
+        "new HashSet<>(int initialCapacity)",
+        "new HashSet<>(Collection<? extends E> c)"
+      ],
+      "LinkedList<E>": [
+        "new LinkedList<>()",
+        "new LinkedList<>(Collection<? extends E> c)"
+      ],
+      "PriorityQueue<E>": [
+        "new PriorityQueue<>()",
+        "new PriorityQueue<>(int initialCapacity)",
+        "new PriorityQueue<>(Collection<? extends E> c)"
       ]
     }
   }

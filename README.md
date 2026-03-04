@@ -10,11 +10,11 @@ Unlike traditional typing tests that just use English vocabulary, JavaTyper buil
 
 - **Standard Syntax Practice**: Generates a continuous stream of classes and core keywords.
 - **Method Practice**: Spawns fully qualified class method signatures, forcing you to practice typing periods, camelCase, parentheses, and semicolons rapidly.
+- **Constructor Practice**: Generates random constructor calls (grouped by package/class data), one constructor per line (e.g., `new String(char[] arr);`).
 - **Intelligent Bracket Auto-Completion**: Typing the leading `<` for generics or `[` for arrays immediately auto-completes the trailing bracket. The user can skip out of the auto-completed brackets with correct keystrokes, mimicking IDE behavior.
 - **Strict Error Handling**: Typos must be corrected! The application will violently refuse to let you pass over wrong characters—physically shaking the letter and emitting an audio warning tone.
 - **Dynamic Configuration**: 
   - Choose any test duration.
-  - Granularly toggle Advanced Keywords (`volatile`, `transient`, `synchronized`, etc.).
   - Select exactly which core Java Packages (e.g. `java.long`, `java.util`) to include in your practice pool.
   - Expand your pool with Advanced Packages like `java.io`, `java.net`, and `java.nio.file`.
 - **Beautiful Aesthetics**: Styled with a dark glassmorphic design and LeetCode-inspired syntax coloring.

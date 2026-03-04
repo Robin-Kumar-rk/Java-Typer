@@ -3,15 +3,16 @@ const state = {
     view: 'config', // 'config', 'typing', 'results'
     config: {
         time: 60,
-        mode: 'standard', // 'standard', 'method'
+        mode: 'standard', // 'standard', 'method', 'constructor'
         includeKeywords: true,
-        includeAdvancedKeywords: false,
         includeClasses: true,
         packages: ['java.lang', 'java.util']
     },
     dictionary: null,
     advancedDictionary: null,
     words: [],
+    keywordBag: [],
+    keywordBagSignature: '',
 
     // Typing state
     currentWordIndex: 0,
@@ -43,7 +44,6 @@ const timeOptions = document.querySelectorAll('input[name="time"]');
 const customTimeInput = document.getElementById('custom-time-input');
 const modeOptions = document.querySelectorAll('input[name="mode"]');
 const toggleKeywords = document.getElementById('toggle-keywords');
-const toggleAdvancedKeywords = document.getElementById('toggle-advanced-keywords');
 const toggleClasses = document.getElementById('toggle-classes');
 const packageTogglesWrapper = document.getElementById('package-toggles');
 const advancedPackageTogglesWrapper = document.getElementById('advanced-package-toggles');
@@ -168,7 +168,8 @@ function bindEvents() {
     modeOptions.forEach(opt => {
         opt.addEventListener('change', (e) => {
             state.config.mode = e.target.value;
-            if (state.config.mode === 'method') {
+            const disableWordToggles = state.config.mode !== 'standard';
+            if (disableWordToggles) {
                 wordTypesSection.style.opacity = '0.5';
                 wordTypesSection.style.pointerEvents = 'none';
             } else {
@@ -252,7 +253,6 @@ function readConfig() {
     state.config.mode = document.querySelector('input[name="mode"]:checked').value;
 
     state.config.includeKeywords = toggleKeywords.checked;
-    state.config.includeAdvancedKeywords = toggleAdvancedKeywords.checked;
     state.config.includeClasses = toggleClasses.checked;
 
     const activePackages = [];
@@ -276,21 +276,10 @@ function generateWords(count = 50) {
     // Collect pools based on config
     let keywordsPool = [];
     let classesPool = [];
-
-    const advancedList = ['volatile', 'transient', 'synchronized', 'instanceof', 'throws'];
-    let baseKeywords = dict.keywords || [];
-
-    // Ensure all advanced words actually exist in baseKeywords
-    advancedList.forEach(adv => {
-        if (!baseKeywords.includes(adv)) baseKeywords.push(adv);
-    });
+    let constructorsPool = [];
 
     if (includeKeywords) {
-        keywordsPool = keywordsPool.concat(baseKeywords.filter(kw => !advancedList.includes(kw)));
-    }
-
-    if (state.config.includeAdvancedKeywords) {
-        keywordsPool = keywordsPool.concat(baseKeywords.filter(kw => advancedList.includes(kw)));
+        keywordsPool = Array.from(new Set(dict.keywords || []));
     }
 
     if (includeClasses || mode === 'method') {
@@ -304,6 +293,13 @@ function generateWords(count = 50) {
                     classesPool.push({ className, methods: state.advancedDictionary.packages[pkgName][className] });
                 });
             }
+        });
+    }
+
+    if (mode === 'constructor') {
+        packages.forEach(pkgName => {
+            addConstructorsToPool(dict, pkgName, constructorsPool);
+            addConstructorsToPool(state.advancedDictionary, pkgName, constructorsPool);
         });
     }
 
@@ -325,11 +321,7 @@ function generateWords(count = 50) {
             }
 
             if (choice === 0) {
-                let kw = getRandomItem(keywordsPool);
-                // Arrays can be appended to primitive types
-                if (['int', 'boolean', 'double', 'float', 'char', 'long', 'short', 'byte', 'String'].includes(kw) && Math.random() > 0.7) {
-                    kw += "[]";
-                }
+                let kw = getNextBalancedKeyword(keywordsPool);
                 words.push(kw);
             } else {
                 const cls = getRandomItem(classesPool).className;
@@ -365,9 +357,36 @@ function generateWords(count = 50) {
             // Push one extra newline to separate from the next class sequence
             words.push("\n");
         }
+    } else if (mode === 'constructor') {
+        for (let i = 0; i < count; i++) {
+            if (constructorsPool.length === 0) {
+                words.push("new Object()");
+                words.push("\n");
+                continue;
+            }
+
+            const constructorCall = getRandomItem(constructorsPool);
+            const normalizedCall = constructorCall.endsWith(';') ? constructorCall : `${constructorCall};`;
+            words.push(normalizedCall);
+            words.push("\n");
+        }
     }
 
     return words;
+}
+
+function addConstructorsToPool(sourceDictionary, packageName, pool) {
+    if (!sourceDictionary || !sourceDictionary.constructors || !sourceDictionary.constructors[packageName]) return;
+
+    const classConstructors = sourceDictionary.constructors[packageName];
+    Object.values(classConstructors).forEach(constructorList => {
+        constructorList.forEach(signature => {
+            const cleaned = signature.trim();
+            if (cleaned.length > 0) {
+                pool.push(cleaned);
+            }
+        });
+    });
 }
 
 // Basic depth 1 & 2 generic resolution
@@ -403,18 +422,42 @@ function getRandomItem(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function getNextBalancedKeyword(keywordsPool) {
+    if (!keywordsPool || keywordsPool.length === 0) return "default";
+
+    const signature = keywordsPool.join('|');
+    if (state.keywordBagSignature !== signature) {
+        state.keywordBagSignature = signature;
+        state.keywordBag = [];
+    }
+
+    if (state.keywordBag.length === 0) {
+        state.keywordBag = shuffleArray([...keywordsPool]);
+    }
+
+    return state.keywordBag.pop();
+}
+
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
 function startTest() {
     readConfig();
 
     // Validation
     if (state.config.mode === 'standard') {
-        if (!state.config.includeKeywords && !state.config.includeClasses && !state.config.includeAdvancedKeywords) {
-            alert("Please select at least one Element Type (Keywords, Classes, or Advanced).");
+        if (!state.config.includeKeywords && !state.config.includeClasses) {
+            alert("Please select at least one Element Type (Keywords or Classes).");
             return;
         }
     }
 
-    if (state.config.mode === 'method' || state.config.includeClasses) {
+    if (state.config.mode === 'method' || state.config.mode === 'constructor' || state.config.includeClasses) {
         if (state.config.packages.length === 0) {
             alert("Please select at least one Package.");
             return;
@@ -458,6 +501,89 @@ function getSyntaxClass(wordStr, mode) {
     return '';
 }
 
+function getConstructorSyntaxClass(wordStr, charIndex) {
+    if (!wordStr.startsWith('new ')) return '';
+
+    // "new" keyword
+    if (charIndex >= 0 && charIndex < 3) {
+        return 'syntax-keyword';
+    }
+
+    const openParenIdx = wordStr.indexOf('(');
+    if (openParenIdx === -1) return '';
+
+    // Class token after "new "
+    const classStart = 4;
+    let classEnd = openParenIdx;
+    while (classEnd > classStart && /\s/.test(wordStr[classEnd - 1])) {
+        classEnd--;
+    }
+
+    if (charIndex >= classStart && charIndex < classEnd && !/\s/.test(wordStr[charIndex])) {
+        return 'syntax-class';
+    }
+
+    // Parameter type tokens inside constructor parentheses
+    const closeParenIdx = wordStr.lastIndexOf(')');
+    if (closeParenIdx === -1 || charIndex <= openParenIdx || charIndex >= closeParenIdx) return '';
+
+    const typeRanges = getConstructorTypeRanges(wordStr, openParenIdx + 1, closeParenIdx);
+    for (const range of typeRanges) {
+        if (charIndex >= range.start && charIndex < range.end && !/\s/.test(wordStr[charIndex])) {
+            return 'syntax-method';
+        }
+    }
+
+    return '';
+}
+
+function getConstructorTypeRanges(wordStr, paramsStart, paramsEnd) {
+    const ranges = [];
+    let segmentStart = paramsStart;
+    let angleDepth = 0;
+
+    for (let i = paramsStart; i <= paramsEnd; i++) {
+        const ch = wordStr[i];
+        const isBoundary = i === paramsEnd || (ch === ',' && angleDepth === 0);
+
+        if (!isBoundary) {
+            if (ch === '<') angleDepth++;
+            if (ch === '>') angleDepth = Math.max(0, angleDepth - 1);
+            continue;
+        }
+
+        const range = getTypeRangeFromSegment(wordStr, segmentStart, i);
+        if (range) ranges.push(range);
+        segmentStart = i + 1;
+    }
+
+    return ranges;
+}
+
+function getTypeRangeFromSegment(wordStr, start, end) {
+    while (start < end && /\s/.test(wordStr[start])) start++;
+    while (end > start && /\s/.test(wordStr[end - 1])) end--;
+    if (start >= end) return null;
+
+    let tail = end - 1;
+    while (tail >= start && /\s/.test(wordStr[tail])) tail--;
+    if (tail < start) return null;
+
+    let identStart = tail;
+    while (identStart >= start && /[A-Za-z0-9_$]/.test(wordStr[identStart])) identStart--;
+
+    let typeEnd = end;
+    const variableStart = identStart + 1;
+    const hasSpaceBeforeVariable = variableStart > start && /\s/.test(wordStr[variableStart - 1]);
+    if (identStart < tail && hasSpaceBeforeVariable) {
+        typeEnd = identStart + 1;
+        while (typeEnd > start && /\s/.test(wordStr[typeEnd - 1])) typeEnd--;
+    }
+
+    if (typeEnd <= start) return null;
+    return { start, end: typeEnd };
+}
+
 function renderWords(startIndex = 0) {
     if (startIndex === 0) wordsWrapper.innerHTML = '';
 
@@ -498,7 +624,12 @@ function renderWords(startIndex = 0) {
             } else if (['(', ')', '{', '}', '[', ']', '<', '>'].includes(char)) {
                 charSpan.classList.add('syntax-brace');
             } else {
-                const syntaxClass = getSyntaxClass(w, state.config.mode);
+                let syntaxClass = '';
+                if (state.config.mode === 'constructor') {
+                    syntaxClass = getConstructorSyntaxClass(w, i);
+                } else {
+                    syntaxClass = getSyntaxClass(w, state.config.mode);
+                }
                 // Also highlight the dot as a generic class so it doesn't look weird
                 if (syntaxClass) charSpan.classList.add(syntaxClass);
             }
@@ -798,6 +929,8 @@ function resetStats() {
     state.currentWordIndex = 0;
     state.currentLetterIndex = 0;
     state.stats = { correctKeystrokes: 0, incorrectKeystrokes: 0, totalKeystrokes: 0 };
+    state.keywordBag = [];
+    state.keywordBagSignature = '';
     wordsWrapper.style.transform = 'translateY(0)';
     wordsWrapper.scrollTop = 0;
 }
@@ -825,7 +958,13 @@ function calculateResults() {
 
     // Context display
     const pkgLabels = state.config.packages.join(', ');
-    resContext.textContent = `Mode: ${state.config.mode === 'standard' ? 'Standard' : 'Method'} | Time: ${Math.floor(state.config.time / 60)} min | Packages: ${pkgLabels}`;
+    const modeLabels = {
+        standard: 'Standard',
+        method: 'Method',
+        constructor: 'Constructor Practice'
+    };
+
+    resContext.textContent = `Mode: ${modeLabels[state.config.mode] || state.config.mode} | Time: ${Math.floor(state.config.time / 60)} min | Packages: ${pkgLabels}`;
 }
 
 // Start

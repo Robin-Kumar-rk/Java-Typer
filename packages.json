@@ -76,5 +76,62 @@
                 ".get(String first, String... more)"
             ]
         }
+    },
+    "constructors": {
+        "java.io": {
+            "File": [
+                "new File(String pathname)",
+                "new File(String parent, String child)",
+                "new File(File parent, String child)"
+            ],
+            "FileInputStream": [
+                "new FileInputStream(String name)",
+                "new FileInputStream(File file)"
+            ],
+            "FileOutputStream": [
+                "new FileOutputStream(String name)",
+                "new FileOutputStream(File file)",
+                "new FileOutputStream(File file, boolean append)"
+            ],
+            "BufferedReader": [
+                "new BufferedReader(Reader in)",
+                "new BufferedReader(Reader in, int sz)"
+            ],
+            "BufferedWriter": [
+                "new BufferedWriter(Writer out)",
+                "new BufferedWriter(Writer out, int sz)"
+            ],
+            "InputStreamReader": [
+                "new InputStreamReader(InputStream in)",
+                "new InputStreamReader(InputStream in, Charset cs)"
+            ],
+            "OutputStreamWriter": [
+                "new OutputStreamWriter(OutputStream out)",
+                "new OutputStreamWriter(OutputStream out, Charset cs)"
+            ],
+            "PrintWriter": [
+                "new PrintWriter(OutputStream out)",
+                "new PrintWriter(Writer out)",
+                "new PrintWriter(String fileName)"
+            ]
+        },
+        "java.net": {
+            "URL": [
+                "new URL(String spec)",
+                "new URL(String protocol, String host, int port, String file)"
+            ],
+            "URI": [
+                "new URI(String str)",
+                "new URI(String scheme, String host, String path, String fragment)"
+            ]
+        },
+        "java.nio.file": {
+            "SimpleFileVisitor<T>": [
+                "new SimpleFileVisitor<>()"
+            ],
+            "FileSystemNotFoundException": [
+                "new FileSystemNotFoundException()"
+            ]
+        }
     }
 }
