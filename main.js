@@ -49,6 +49,7 @@ const packageTogglesWrapper = document.getElementById('package-toggles');
 const advancedPackageTogglesWrapper = document.getElementById('advanced-package-toggles');
 const btnStart = document.getElementById('btn-start');
 const wordTypesSection = document.getElementById('word-types-section');
+const themeToggle = document.getElementById('theme-toggle');
 
 // Elements Typing
 const wordsWrapper = document.getElementById('words-wrapper');
@@ -62,12 +63,57 @@ const resAcc = document.getElementById('res-acc');
 const resKeys = document.getElementById('res-keys');
 const resContext = document.getElementById('res-context');
 const btnRestart = document.getElementById('btn-restart-results');
+const THEME_STORAGE_KEY = 'javaTyperTheme';
 
 // Initialize
 async function init() {
+    initTheme();
     await loadDictionary();
     populatePackagesUI();
     bindEvents();
+}
+
+function initTheme() {
+    let savedTheme = null;
+    try {
+        savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    } catch (e) {
+        savedTheme = null;
+    }
+
+    const systemPrefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    const initialTheme = savedTheme || (systemPrefersLight ? 'light' : 'dark');
+
+    applyTheme(initialTheme);
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
+}
+
+function toggleTheme() {
+    const currentTheme = document.body.dataset.theme === 'light' ? 'light' : 'dark';
+    const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+    applyTheme(nextTheme);
+
+    try {
+        localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+    } catch (e) {
+        // Ignore storage failures in restricted browsing modes.
+    }
+}
+
+function applyTheme(theme) {
+    const normalizedTheme = theme === 'light' ? 'light' : 'dark';
+    document.body.dataset.theme = normalizedTheme;
+
+    if (!themeToggle) return;
+
+    const isLight = normalizedTheme === 'light';
+    themeToggle.setAttribute('aria-pressed', String(isLight));
+    const label = isLight ? 'Switch to dark mode' : 'Switch to light mode';
+    themeToggle.setAttribute('aria-label', label);
+    themeToggle.setAttribute('title', label);
 }
 
 function populatePackagesUI() {
