@@ -57,6 +57,15 @@
         ".split(String regex)",
         ".replace(CharSequence target, CharSequence replacement)"
       ],
+      "StringBuilder": [
+        ".append(String str)",
+        ".append(int i)",
+        ".insert(int offset, String str)",
+        ".delete(int start, int end)",
+        ".reverse()",
+        ".toString()",
+        ".length()"
+      ],
       "Math": [
         ".max(int a, int b)",
         ".abs(int a)",
@@ -83,19 +92,9 @@
         ".parseDouble(String s)"
       ]
     },
+
     "java.util": {
-      "HashMap<K, V>": [
-        ".put(K key, V value)",
-        ".get(Object key)",
-        ".containsKey(Object key)",
-        ".containsValue(Object value)",
-        ".remove(Object key)",
-        ".keySet()",
-        ".values()",
-        ".entrySet()",
-        ".size()",
-        ".isEmpty()"
-      ],
+
       "List<E>": [
         ".add(E e)",
         ".add(int index, E element)",
@@ -108,35 +107,192 @@
         ".contains(Object o)",
         ".clear()"
       ],
+
       "ArrayList<E>": [
         ".add(E e)",
         ".get(int index)",
+        ".set(int index, E element)",
+        ".size()",
+        ".remove(int index)",
+        ".contains(Object o)",
+        ".clear()"
+      ],
+
+      "LinkedList<E>": [
+        ".add(E e)",
+        ".addFirst(E e)",
+        ".addLast(E e)",
+        ".get(int index)",
+        ".removeFirst()",
+        ".removeLast()",
         ".size()"
       ],
+
       "Set<E>": [
         ".add(E e)",
         ".remove(Object o)",
         ".contains(Object o)",
-        ".size()"
+        ".size()",
+        ".isEmpty()"
       ],
+
       "HashSet<E>": [
         ".add(E e)",
         ".remove(Object o)",
-        ".contains(Object o)"
+        ".contains(Object o)",
+        ".size()",
+        ".isEmpty()"
       ],
+
+      "LinkedHashSet<E>": [
+        ".add(E e)",
+        ".remove(Object o)",
+        ".contains(Object o)",
+        ".size()",
+        ".isEmpty()"
+      ],
+
+      "TreeSet<E>": [
+        ".add(E e)",
+        ".remove(Object o)",
+        ".contains(Object o)",
+        ".first()",
+        ".last()",
+        ".higher(E e)",
+        ".lower(E e)",
+        ".ceiling(E e)",
+        ".floor(E e)",
+        ".size()",
+        ".isEmpty()"
+      ],
+
+      "Map<K, V>": [
+        ".put(K key, V value)",
+        ".get(Object key)",
+        ".remove(Object key)",
+        ".containsKey(Object key)",
+        ".keySet()",
+        ".values()",
+        ".entrySet()",
+        ".size()",
+        ".isEmpty()"
+      ],
+
+      "HashMap<K, V>": [
+        ".put(K key, V value)",
+        ".get(Object key)",
+        ".containsKey(Object key)",
+        ".containsValue(Object value)",
+        ".remove(Object key)",
+        ".keySet()",
+        ".values()",
+        ".entrySet()",
+        ".size()",
+        ".isEmpty()"
+      ],
+
+      "LinkedHashMap<K, V>": [
+        ".put(K key, V value)",
+        ".get(Object key)",
+        ".remove(Object key)",
+        ".containsKey(Object key)",
+        ".keySet()",
+        ".values()",
+        ".entrySet()",
+        ".size()"
+      ],
+
+      "TreeMap<K, V>": [
+        ".put(K key, V value)",
+        ".get(Object key)",
+        ".remove(Object key)",
+        ".containsKey(Object key)",
+        ".firstKey()",
+        ".lastKey()",
+        ".higherKey(K key)",
+        ".lowerKey(K key)",
+        ".ceilingKey(K key)",
+        ".floorKey(K key)",
+        ".keySet()",
+        ".values()",
+        ".size()"
+      ],
+
       "Queue<E>": [
         ".add(E e)",
         ".offer(E e)",
         ".remove()",
         ".poll()",
         ".element()",
-        ".peek()"
+        ".peek()",
+        ".size()",
+        ".isEmpty()"
       ],
-      "Map<K, V>": [
-        ".put(K key, V value)",
-        ".get(Object key)",
-        ".keySet()"
+
+      "Deque<E>": [
+        ".addFirst(E e)",
+        ".addLast(E e)",
+        ".offerFirst(E e)",
+        ".offerLast(E e)",
+        ".removeFirst()",
+        ".removeLast()",
+        ".pollFirst()",
+        ".pollLast()",
+        ".peekFirst()",
+        ".peekLast()",
+        ".push(E e)",
+        ".pop()"
       ],
+
+      "ArrayDeque<E>": [
+        ".add(E e)",
+        ".addFirst(E e)",
+        ".addLast(E e)",
+        ".offer(E e)",
+        ".offerFirst(E e)",
+        ".offerLast(E e)",
+        ".removeFirst()",
+        ".removeLast()",
+        ".pollFirst()",
+        ".pollLast()",
+        ".peekFirst()",
+        ".peekLast()",
+        ".push(E e)",
+        ".pop()",
+        ".size()",
+        ".isEmpty()"
+      ],
+
+      "PriorityQueue<E>": [
+        ".add(E e)",
+        ".offer(E e)",
+        ".poll()",
+        ".peek()",
+        ".remove()",
+        ".contains(Object o)",
+        ".size()",
+        ".isEmpty()"
+      ],
+
+      "Stack<E>": [
+        ".push(E item)",
+        ".pop()",
+        ".peek()",
+        ".empty()",
+        ".search(Object o)",
+        ".size()"
+      ],
+
+      "Iterator<E>": [
+        ".hasNext()",
+        ".next()",
+        ".remove()"
+      ],
+
+      "Comparator<T>": [
+        ".compare(T o1, T o2)"
+      ],
+
       "Arrays": [
         ".sort(int[] a)",
         ".binarySearch(int[] a, int key)",
@@ -144,64 +300,114 @@
         ".copyOf(int[] original, int newLength)",
         ".toString(int[] a)"
       ],
+
       "Collections": [
         ".sort(List<T> list)",
         ".binarySearch(List<? extends Comparable<? super T>> list, T key)",
         ".reverse(List<?> list)",
-        ".shuffle(List<?> list)"
+        ".shuffle(List<?> list)",
+        ".min(Collection<T> coll)",
+        ".max(Collection<T> coll)",
+        ".frequency(Collection<?> c, Object o)"
       ]
     }
   },
+
   "constructors": {
     "java.lang": {
+
       "String": [
         "new String()",
         "new String(char[] arr)",
         "new String(byte[] bytes)",
         "new String(String original)"
       ],
+
       "StringBuilder": [
         "new StringBuilder()",
         "new StringBuilder(int capacity)",
         "new StringBuilder(String str)"
       ],
+
       "Integer": [
         "new Integer(int value)",
         "new Integer(String s)"
       ],
+
       "Double": [
         "new Double(double value)",
         "new Double(String s)"
       ],
+
       "Object": [
         "new Object()"
       ]
     },
+
     "java.util": {
+
       "ArrayList<E>": [
         "new ArrayList<>()",
         "new ArrayList<>(int initialCapacity)",
         "new ArrayList<>(Collection<? extends E> c)"
       ],
+
+      "LinkedList<E>": [
+        "new LinkedList<>()",
+        "new LinkedList<>(Collection<? extends E> c)"
+      ],
+
       "HashMap<K, V>": [
         "new HashMap<>()",
         "new HashMap<>(int initialCapacity)",
         "new HashMap<>(Map<? extends K, ? extends V> m)"
       ],
+
+      "LinkedHashMap<K,V>": [
+        "new LinkedHashMap<>()",
+        "new LinkedHashMap<>(int initialCapacity)"
+      ],
+
+      "TreeMap<K,V>": [
+        "new TreeMap<>()",
+        "new TreeMap<>(Comparator<? super K> comparator)",
+        "new TreeMap<>(Map<? extends K, ? extends V> m)"
+      ],
+
       "HashSet<E>": [
         "new HashSet<>()",
         "new HashSet<>(int initialCapacity)",
         "new HashSet<>(Collection<? extends E> c)"
       ],
-      "LinkedList<E>": [
-        "new LinkedList<>()",
-        "new LinkedList<>(Collection<? extends E> c)"
+
+      "LinkedHashSet<E>": [
+        "new LinkedHashSet<>()",
+        "new LinkedHashSet<>(Collection<? extends E> c)"
       ],
+
+      "TreeSet<E>": [
+        "new TreeSet<>()",
+        "new TreeSet<>(Comparator<? super E> comparator)",
+        "new TreeSet<>(Collection<? extends E> c)"
+      ],
+
       "PriorityQueue<E>": [
         "new PriorityQueue<>()",
         "new PriorityQueue<>(int initialCapacity)",
+        "new PriorityQueue<>(Comparator<? super E> comparator)",
         "new PriorityQueue<>(Collection<? extends E> c)"
+      ],
+
+      "ArrayDeque<E>": [
+        "new ArrayDeque<>()",
+        "new ArrayDeque<>(int numElements)",
+        "new ArrayDeque<>(Collection<? extends E> c)"
+      ],
+
+      "Stack<E>": [
+        "new Stack<>()"
       ]
     }
   }
 }
+
